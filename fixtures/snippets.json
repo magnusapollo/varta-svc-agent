@@ -1,0 +1,7 @@
+{
+  "it_001": "OpenAI\u2019s DevDay showcased improved function-calling and lightweight agents that simplify app dev pipelines.",
+  "it_002": "pgvector embeds inside Postgres for simplicity, while external engines offer better recall/latency at scale.",
+  "it_003": "Hybrid scoring blends embeddings, BM25, and a recency boost to prioritize fresh, diverse sources.",
+  "it_004": "LangGraph structures agents as state graphs with planner, tool routing, and synthesis nodes.",
+  "it_005": "SQLite with FTS5 and approximate indexes can serve small RAG workloads with minimal ops."
+}

@@ -1,0 +1,61 @@
+[
+  {
+    "id": "it_001",
+    "slug": "openai-devday-2025-roundup",
+    "title": "DevDay 2025: New Tools for App Developers",
+    "url": "https://news.example.com/app-dev/devday-2025-tools",
+    "published_at": "2025-11-01",
+    "excerpt": "Highlights from DevDay 2025 focusing on app dev toolchains and agents.",
+    "topics": [
+      "app-dev",
+      "ai-tools"
+    ]
+  },
+  {
+    "id": "it_002",
+    "slug": "vector-db-for-postgres",
+    "title": "Vector DB Options for PostgreSQL",
+    "url": "https://blog.example.org/data/vector-db-for-postgres",
+    "published_at": "2025-10-28",
+    "excerpt": "pgvector vs. external FAISS/Qdrant \u2014 tradeoffs for production.",
+    "topics": [
+      "data",
+      "app-dev"
+    ]
+  },
+  {
+    "id": "it_003",
+    "slug": "incremental-rag-pipelines",
+    "title": "Incremental RAG Pipelines for News Sites",
+    "url": "https://labs.example.net/retrieval/incremental-rag",
+    "published_at": "2025-10-26",
+    "excerpt": "Designing freshness-first retrieval with hybrid scoring and topic filters.",
+    "topics": [
+      "retrieval",
+      "ai-tools"
+    ]
+  },
+  {
+    "id": "it_004",
+    "slug": "langgraph-beginners-guide",
+    "title": "A Practical Guide to LangGraph",
+    "url": "https://docs.example.dev/langgraph/guide",
+    "published_at": "2025-10-20",
+    "excerpt": "Planner \u2192 Retriever \u2192 Answerer patterns for agentic pipelines.",
+    "topics": [
+      "app-dev",
+      "agents"
+    ]
+  },
+  {
+    "id": "it_005",
+    "slug": "sqlite-embeddings-local",
+    "title": "Shipping a Local Vector Store with SQLite",
+    "url": "https://dev.example.com/vector/sqlite-embeddings-local",
+    "published_at": "2025-09-30",
+    "excerpt": "When FAISS is overkill: SQLite-backed ANN for small corpora.",
+    "topics": [
+      "data"
+    ]
+  }
+]
