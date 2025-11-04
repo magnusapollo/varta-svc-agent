@@ -1,0 +1,73 @@
+# -----------------------------
+# Python
+# -----------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.so
+*.egg
+*.egg-info/
+.eggs/
+dist/
+build/
+wheels/
+*.log
+*.pot
+*.pyc
+.env
+.venv
+venv/
+.env.*
+.envrc
+
+# If using virtualenv inside project
+# .venv/
+
+# -----------------------------
+# Poetry
+# -----------------------------
+# Uncomment if you want to ignore Poetry’s virtual environment
+# poetry.lock
+# Avoid ignoring pyproject.toml – it must be committed!
+
+# -----------------------------
+# FastAPI / Uvicorn
+# -----------------------------
+# Cache & runtime files
+*.pid
+*.db
+*.sqlite3
+
+# -----------------------------
+# PyCharm / IntelliJ
+# -----------------------------
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# -----------------------------
+# Testing
+# -----------------------------
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.cache/
+.tox/
+.mypy_cache/
+hypothesis/
+
+# -----------------------------
+# VSCode (optional)
+# -----------------------------
+.vscode/
+
+# -----------------------------
+# macOS & System Files
+# -----------------------------
+.DS_Store
+Thumbs.db
+
