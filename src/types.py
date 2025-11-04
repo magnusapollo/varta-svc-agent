@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Dict, Optional
+from typing import List, Optional, Literal
 
 class ChatFilters(BaseModel):
     topic: Optional[List[str]] = None
@@ -8,6 +8,7 @@ class ChatFilters(BaseModel):
 class ChatRequest(BaseModel):
     conversationId: Optional[str] = None
     message: str
+    role: Literal["user", "system"]
     filters: Optional[ChatFilters] = None
     mode: Optional[str] = Field(default="summary", pattern="^(summary|timeline|pros-cons|for-builders)$")
 

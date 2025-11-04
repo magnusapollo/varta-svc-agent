@@ -1,24 +1,33 @@
 [tool.poetry]
 name = "varta-svc-agent"
-version = "0.1.0"
+version = "0.1.2"
 description = "Agent service for chat + RAG over site data (mock-first)"
 authors = ["Varta Team"]
 readme = "README.md"
-# This is an application (no installable package); keeps src layout simple.
 package-mode = false
 
 [tool.poetry.dependencies]
-python = ">=3.11,<4.0"
+# Pin to versions with wide prebuilt wheel support (avoid 3.14 until SciPy stack is ready)
+python = ">=3.11,<3.14"
 fastapi = ">=0.115"
 uvicorn = {version = ">=0.30", extras = ["standard"]}
 pydantic = ">=2.8"
 httpx = ">=0.27"
 python-dotenv = ">=1.0"
 numpy = ">=1.26"
-scikit-learn = ">=1.4"
 tldextract = ">=5.1"
 openai = ">=1.0.0"
-sentence-transformers = {version = ">=3.0", markers = "platform_machine != 'ppc64le'"}
+
+# NOTE: No scikit-learn / scipy in base deps to avoid Fortran / PEP517 builds.
+
+[tool.poetry.group.embeddings]
+optional = true
+
+[tool.poetry.group.embeddings.dependencies]
+# Opt-in heavy deps only when you want real embeddings:
+# Ensure your Python has compatible wheels for these versions.
+torch = "==2.9.0"
+sentence-transformers = ">=3.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=8.3"
