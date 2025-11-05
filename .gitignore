@@ -19,7 +19,6 @@ wheels/
 .env
 .venv
 venv/
-.env.*
 .envrc
 
 # If using virtualenv inside project
