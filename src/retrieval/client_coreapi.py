@@ -5,7 +5,7 @@ from ..config import settings
 
 class CoreApiClient:
     def __init__(self, base_url: str | None = None):
-        self.base = base_url or settings.CORE_API_BASE
+        self.base = base_url or settings.core_api_base
         self._client = httpx.AsyncClient(timeout=10)
 
     async def search(self, query: str, k: int, filters: dict | None) -> List[Dict[str, Any]]:

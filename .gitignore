@@ -18,11 +18,9 @@ wheels/
 *.pyc
 .env
 .venv
+.venv/
 venv/
 .envrc
-
-# If using virtualenv inside project
-# .venv/
 
 # -----------------------------
 # Poetry
@@ -69,4 +67,3 @@ hypothesis/
 # -----------------------------
 .DS_Store
 Thumbs.db
-

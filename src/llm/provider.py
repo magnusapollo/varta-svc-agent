@@ -1,10 +1,13 @@
 from __future__ import annotations
 from typing import List, Dict, Protocol, Tuple, Optional
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 # --------- Provider interface ---------
 class Model(Protocol):
-    def generate_answer(self, query: str, docs: List[Dict]) -> Tuple[str, List[str]]:
+    def generate_answer(self, query: str, docs: List[Dict], max_tokens: int = 500, temperature: float = 0.8) -> Tuple[str, List[str]]:
         """
         Returns:
           answer_text: str
@@ -81,7 +84,7 @@ class OpenAIChat:
             return name.split(":", 1)[1]
         return name
 
-    def generate_answer(self, query: str, docs: List[Dict]) -> Tuple[str, List[str]]:
+    def generate_answer(self, query: str, docs: List[Dict], max_tokens: int, temperature: float) -> Tuple[str, List[str]]:
         if not docs:
             return "I don’t know yet. Try adding a topic filter or a timeframe like since:P7D.", []
 
@@ -123,12 +126,14 @@ class OpenAIChat:
                     {"role": "system", "content": system},
                     {"role": "user", "content": user},
                 ],
-                temperature=float(os.getenv("TEMPERATURE", "0.3")),
-                max_tokens=int(os.getenv("MAX_TOKENS", "800")),
+                temperature=1,
+                max_completion_tokens=max_tokens,
             )
             content = (resp.choices[0].message.content or "").strip()
+            logger.debug(content)
         except Exception as e:
             # Fall back gracefully to a stub-like response on error
+            logger.error(e)
             fallback_lines = []
             for i, d in enumerate(docs[:3], start=1):
                 snippet = (d.get("snippet") or d.get("excerpt") or "").strip()
@@ -151,9 +156,9 @@ _REGISTRY = {
 }
 
 def choose_model(name: Optional[str]) -> Model:
+    logger.info(f"model chosen: {name}")
     if not name:
         return _REGISTRY["stub-local"]
-
     lower = name.lower()
     # Treat any "openai:*" or a known OpenAI family (e.g., gpt-5, gpt-4o) as OpenAI
     if lower.startswith("openai:") or lower.startswith("gpt-"):

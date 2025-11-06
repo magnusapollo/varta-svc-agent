@@ -59,7 +59,7 @@ except Exception:
 try:
     from sentence_transformers import SentenceTransformer  # type: ignore
 
-    _emb_model = SentenceTransformer(settings.EMBEDDING_MODEL)
+    _emb_model = SentenceTransformer(settings.embedding_model)
     _emb_dim = _emb_model.get_sentence_embedding_dimension()
     vecs = _emb_model.encode(_docs, normalize_embeddings=True)
     vecs = np.asarray(vecs, dtype=np.float32)
@@ -116,7 +116,7 @@ def _embed_scores(q: str, k: int) -> List[Tuple[str, float]]:
     return _vec_store.search(qv, k)
 
 def _recency_boost(ts: int, now_ts: int) -> float:
-    half_life = settings.RECENCY_HALFLIFE_DAYS * 86400.0
+    half_life = settings.recency_halflife_days * 86400.0
     age = max(0.0, now_ts - ts)
     return 2 ** (-age / half_life)
 
@@ -138,7 +138,7 @@ def hybrid_search(query: str, k: int, topics: List[str] | None, since: str | Non
         idx = ids.index(doc_id)
         ts = timestamps[idx]
         rec = _recency_boost(ts, now_ts)
-        score = settings.ALPHA_EMBED * s_em + settings.BETA_KEYWORD * s_kw + settings.GAMMA_RECENCY * rec
+        score = settings.alpha_embed * s_em + settings.beta_keyword * s_kw + settings.gamma_recency * rec
         scores[doc_id] = score
 
     # filters
@@ -158,7 +158,7 @@ def hybrid_search(query: str, k: int, topics: List[str] | None, since: str | Non
     for doc_id, sc in ranked:
         meta = _items[ids.index(doc_id)]
         dom = domains[ids.index(doc_id)]
-        if per_domain.get(dom, 0) >= settings.MAX_PER_DOMAIN:
+        if per_domain.get(dom, 0) >= settings.max_per_domain:
             continue
         out.append({
             "item_id": doc_id,
