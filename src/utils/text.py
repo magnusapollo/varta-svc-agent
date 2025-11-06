@@ -1,5 +1,6 @@
 import re
 
+
 def sentence_chunks(text: str, max_len: int = 200):
     parts = re.split(r"(?<=[.!?])\s+", text.strip())
     buf = ""

@@ -4,6 +4,7 @@ from typing import List, Dict, Tuple
 from collections import Counter
 import numpy as np
 
+
 class SimpleTfidfVectorizer:
     """
     Minimal TF-IDF (pure Python + NumPy) to avoid scikit-learn/scipy.

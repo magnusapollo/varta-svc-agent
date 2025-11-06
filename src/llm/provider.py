@@ -5,9 +5,12 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 # --------- Provider interface ---------
 class Model(Protocol):
-    def generate_answer(self, query: str, docs: List[Dict], max_tokens: int = 500, temperature: float = 0.8) -> Tuple[str, List[str]]:
+    def generate_answer(
+        self, query: str, docs: List[Dict], max_tokens: int = 500, temperature: float = 0.8
+    ) -> Tuple[str, List[str]]:
         """
         Returns:
           answer_text: str
@@ -57,6 +60,7 @@ class OpenAIChat:
       We then return citation_ids = [doc.item_id for doc in docs[:N]] so the caller
       can resolve [n] → that id/title/url.
     """
+
     def __init__(self, model_name: str):
         self.model = self._normalize_model(model_name)
         try:
@@ -84,7 +88,9 @@ class OpenAIChat:
             return name.split(":", 1)[1]
         return name
 
-    def generate_answer(self, query: str, docs: List[Dict], max_tokens: int, temperature: float) -> Tuple[str, List[str]]:
+    def generate_answer(
+        self, query: str, docs: List[Dict], max_tokens: int, temperature: float
+    ) -> Tuple[str, List[str]]:
         if not docs:
             return "I don’t know yet. Try adding a topic filter or a timeframe like since:P7D.", []
 
@@ -93,8 +99,8 @@ class OpenAIChat:
         citation_ids: List[str] = []
         for i, d in enumerate(docs, start=1):
             sources_lines.append(
-                f"[{i}] {d.get('title','').strip()} — {d.get('url','')} "
-                f"(published: {d.get('published_at','')})\n"
+                f"[{i}] {d.get('title', '').strip()} — {d.get('url', '')} "
+                f"(published: {d.get('published_at', '')})\n"
                 f"Snippet: {(d.get('snippet') or d.get('excerpt') or '').strip()}"
             )
             citation_ids.append(d["item_id"])
@@ -154,6 +160,7 @@ _REGISTRY = {
     "stub-local": LocalStub(),
     # We register a sentinel; instances of OpenAIChat are created dynamically
 }
+
 
 def choose_model(name: Optional[str]) -> Model:
     logger.info(f"model chosen: {name}")

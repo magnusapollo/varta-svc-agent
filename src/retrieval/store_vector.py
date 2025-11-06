@@ -2,6 +2,7 @@ from __future__ import annotations
 import numpy as np
 from typing import List, Tuple
 
+
 class InMemoryVectorStore:
     def __init__(self, dim: int):
         self.dim = dim
@@ -20,6 +21,8 @@ class InMemoryVectorStore:
         if self.vecs is None or len(self.ids) == 0:
             return []
         q = q.astype(np.float32)
-        sims = (self.vecs @ q) / (np.linalg.norm(self.vecs, axis=1) * (np.linalg.norm(q) + 1e-8) + 1e-8)
+        sims = (self.vecs @ q) / (
+            np.linalg.norm(self.vecs, axis=1) * (np.linalg.norm(q) + 1e-8) + 1e-8
+        )
         idx = np.argsort(-sims)[:k]
         return [(self.ids[i], float(sims[i])) for i in idx]

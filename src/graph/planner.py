@@ -1,5 +1,6 @@
 from typing import Any, Dict, Optional
 
+
 def plan_request(query: str, filters: Optional[Dict[str, Any]], k_default: int) -> Dict[str, Any]:
     mode = (filters or {}).get("mode") or "summary"
     topics = (filters or {}).get("topic") or []

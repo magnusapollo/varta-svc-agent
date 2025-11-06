@@ -53,6 +53,7 @@ except Exception:
     def _tfidf_encode(texts: List[str]) -> np.ndarray:
         return _tfidf.transform(texts).astype(np.float32)
 
+
 # ----------------------------
 # Embeddings (sentence-transformers optional)
 # ----------------------------
@@ -69,6 +70,7 @@ except Exception:
     norms = np.linalg.norm(vecs, axis=1, keepdims=True) + 1e-8
     vecs = vecs / norms
     _emb_dim = vecs.shape[1]
+
 
 # In-memory "vector store"
 class InMemoryVectorStore:
@@ -89,13 +91,16 @@ class InMemoryVectorStore:
         if self.vecs is None or len(self.ids) == 0:
             return []
         q = q.astype(np.float32)
-        sims = (self.vecs @ q) / (np.linalg.norm(self.vecs, axis=1) * (np.linalg.norm(q) + 1e-8) + 1e-8)
+        sims = (self.vecs @ q) / (
+            np.linalg.norm(self.vecs, axis=1) * (np.linalg.norm(q) + 1e-8) + 1e-8
+        )
         idx = np.argsort(-sims)[:k]
         return [(self.ids[i], float(sims[i])) for i in idx]
 
 
 _vec_store = InMemoryVectorStore(dim=_emb_dim)
 _vec_store.add(ids, vecs)
+
 
 # ----------------------------
 # Scoring components
@@ -106,6 +111,7 @@ def _keyword_scores(q: str, k: int) -> List[Tuple[str, float]]:
     idx = np.argsort(-sims)[:k]
     return [(ids[i], float(sims[i])) for i in idx]
 
+
 def _embed_scores(q: str, k: int) -> List[Tuple[str, float]]:
     try:
         qv = _emb_model.encode([q], normalize_embeddings=True)  # type: ignore[name-defined]
@@ -115,15 +121,19 @@ def _embed_scores(q: str, k: int) -> List[Tuple[str, float]]:
         qv = qv / (np.linalg.norm(qv) + 1e-8)
     return _vec_store.search(qv, k)
 
+
 def _recency_boost(ts: int, now_ts: int) -> float:
     half_life = settings.recency_halflife_days * 86400.0
     age = max(0.0, now_ts - ts)
     return 2 ** (-age / half_life)
 
+
 # ----------------------------
 # Public API
 # ----------------------------
-def hybrid_search(query: str, k: int, topics: List[str] | None, since: str | None) -> List[Dict[str, Any]]:
+def hybrid_search(
+    query: str, k: int, topics: List[str] | None, since: str | None
+) -> List[Dict[str, Any]]:
     now_ts = int(time.time())
     base_k = max(k * 6, 30)
 
@@ -138,7 +148,11 @@ def hybrid_search(query: str, k: int, topics: List[str] | None, since: str | Non
         idx = ids.index(doc_id)
         ts = timestamps[idx]
         rec = _recency_boost(ts, now_ts)
-        score = settings.alpha_embed * s_em + settings.beta_keyword * s_kw + settings.gamma_recency * rec
+        score = (
+            settings.alpha_embed * s_em
+            + settings.beta_keyword * s_kw
+            + settings.gamma_recency * rec
+        )
         scores[doc_id] = score
 
     # filters
@@ -148,7 +162,10 @@ def hybrid_search(query: str, k: int, topics: List[str] | None, since: str | Non
 
     if topics:
         topics_set = set(t.lower() for t in topics)
-        def has_topic(it): return bool(set(t.lower() for t in it.get("topics", [])) & topics_set)
+
+        def has_topic(it):
+            return bool(set(t.lower() for t in it.get("topics", [])) & topics_set)
+
         scores = {i: s for i, s in scores.items() if has_topic(_items[ids.index(i)])}
 
     # diversify by domain
@@ -160,16 +177,19 @@ def hybrid_search(query: str, k: int, topics: List[str] | None, since: str | Non
         dom = domains[ids.index(doc_id)]
         if per_domain.get(dom, 0) >= settings.max_per_domain:
             continue
-        out.append({
-            "item_id": doc_id,
-            "score": round(sc, 6),
-            "slug": meta["slug"],
-            "title": meta["title"],
-        })
+        out.append(
+            {
+                "item_id": doc_id,
+                "score": round(sc, 6),
+                "slug": meta["slug"],
+                "title": meta["title"],
+            }
+        )
         per_domain[dom] = per_domain.get(dom, 0) + 1
         if len(out) >= k:
             break
     return out
+
 
 def resolve_items(item_ids: List[str]) -> List[Dict[str, Any]]:
     by_id = {it["id"]: it for it in _items}
@@ -178,11 +198,13 @@ def resolve_items(item_ids: List[str]) -> List[Dict[str, Any]]:
         it = by_id.get(iid)
         if not it:
             continue
-        result.append({
-            "item_id": it["id"],
-            "title": it["title"],
-            "url": it["url"],
-            "published_at": it["published_at"],
-            "snippet": _snips.get(iid, ""),
-        })
+        result.append(
+            {
+                "item_id": it["id"],
+                "title": it["title"],
+                "url": it["url"],
+                "published_at": it["published_at"],
+                "snippet": _snips.get(iid, ""),
+            }
+        )
     return result

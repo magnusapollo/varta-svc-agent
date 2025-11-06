@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class Settings(BaseModel):
     use_mocks: bool = os.getenv("USE_MOCKS", "true").lower() == "true"
     log_level: str = os.getenv("LOG_LEVEL", "INFO")
@@ -20,5 +21,6 @@ class Settings(BaseModel):
     max_per_domain: int = int(os.getenv("MAX_PER_DOMAIN", "2"))
     min_citations: int = int(os.getenv("MIN_CITATIONS", "2"))
     recency_halflife_days: float = float(os.getenv("RECENCY_HALFLIFE_DAYS", "10"))
+
 
 settings = Settings()

@@ -2,6 +2,7 @@ from typing import Any, Dict, List
 from ..config import settings
 from ..retrieval.hybrid import hybrid_search, resolve_items
 
+
 async def retrieve_docs(plan: Dict[str, Any]) -> List[Dict[str, Any]]:
     # In v1, USE_MOCKS governs whether we call Core API (omitted here) or use fixtures.
     # For simplicity, we always use local hybrid over fixtures; switching to Core API is via client_coreapi.

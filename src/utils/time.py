@@ -1,6 +1,7 @@
 from __future__ import annotations
 import re, time, datetime as dt
 
+
 def parse_since_to_timestamp(since: str, now_ts: int | None = None) -> int:
     """Accepts ISO date (YYYY-MM-DD) or ISO8601 period like P7D, P1M."""
     now_ts = now_ts or int(time.time())
