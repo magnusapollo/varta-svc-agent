@@ -1,7 +1,8 @@
 from __future__ import annotations
-import math
-from typing import List, Dict, Tuple
+
 from collections import Counter
+import math
+
 import numpy as np
 
 
@@ -15,13 +16,13 @@ class SimpleTfidfVectorizer:
 
     def __init__(self, max_features: int = 20000):
         self.max_features = max_features
-        self.vocab_: Dict[str, int] = {}
+        self.vocab_: dict[str, int] = {}
         self.idf_: np.ndarray | None = None
 
-    def _tokenize(self, s: str) -> List[str]:
+    def _tokenize(self, s: str) -> list[str]:
         return [t for t in s.lower().split() if t]
 
-    def fit_transform(self, corpus: List[str]) -> np.ndarray:
+    def fit_transform(self, corpus: list[str]) -> np.ndarray:
         # build DF
         df: Counter[str] = Counter()
         tokenized = [self._tokenize(doc) for doc in corpus]
@@ -51,7 +52,7 @@ class SimpleTfidfVectorizer:
                 X[row, idx] = tf * idf[idx]
         return X
 
-    def transform(self, texts: List[str]) -> np.ndarray:
+    def transform(self, texts: list[str]) -> np.ndarray:
         assert self.vocab_ and self.idf_ is not None, "Call fit_transform first."
         X = np.zeros((len(texts), len(self.vocab_)), dtype=np.float32)
         for row, s in enumerate(texts):

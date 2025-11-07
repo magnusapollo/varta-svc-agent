@@ -1,7 +1,7 @@
-from typing import Any, Dict, Optional
+from typing import Any
 
 
-def plan_request(query: str, filters: Optional[Dict[str, Any]], k_default: int) -> Dict[str, Any]:
+def plan_request(query: str, filters: dict[str, Any] | None, k_default: int) -> dict[str, Any]:
     mode = (filters or {}).get("mode") or "summary"
     topics = (filters or {}).get("topic") or []
     since = (filters or {}).get("since")

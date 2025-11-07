@@ -1,11 +1,13 @@
-from typing import Any, Dict, List
+from typing import Any
+
 from ..config import settings
 from ..retrieval.hybrid import hybrid_search, resolve_items
 
 
-async def retrieve_docs(plan: Dict[str, Any]) -> List[Dict[str, Any]]:
+async def retrieve_docs(plan: dict[str, Any]) -> list[dict[str, Any]]:
     # In v1, USE_MOCKS governs whether we call Core API (omitted here) or use fixtures.
-    # For simplicity, we always use local hybrid over fixtures; switching to Core API is via client_coreapi.
+    # For simplicity, we always use local hybrid over fixtures;
+    # switching to Core API is via client_coreapi.
     k = plan.get("k", settings.retrieve_k)
     res = hybrid_search(plan["query"], k, plan.get("topics"), plan.get("since"))
     # attach snippets for downstream answerer

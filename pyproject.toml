@@ -32,8 +32,8 @@ sentence-transformers = ">=3.0"
 [tool.poetry.group.dev.dependencies]
 pytest = ">=8.3"
 pytest-asyncio = ">=0.23"
-black = ">=24.0"
-ruff = ">=0.6"
+black = ">=25.9.0"
+ruff = ">=0.14"
 mypy = ">=1.10"
 
 [build-system]
@@ -45,7 +45,22 @@ line-length = 100
 target-version = ["py311"]
 
 [tool.ruff]
+src=["src"]
 line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+# F = pyflakes (incl. F401 unused imports)
+# I = isort rules (import sorting)
+# UP = pyupgrade, B = bugbear, SIM = complexity, ARG = unused args, RUF = extra rules
+select = ["E", "F", "I", "UP", "B", "SIM", "ARG", "RUF"]
+ignore = []
+fixable = ["ALL"]        # allow --fix to apply everything
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+combine-as-imports = true
+force-sort-within-sections = true
 
 [tool.pytest.ini_options]
 addopts = "-q"

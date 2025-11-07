@@ -1,19 +1,18 @@
-from fastapi import FastAPI, Body
+from collections.abc import AsyncGenerator
+import logging
+
+from fastapi import Body, FastAPI
 from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel
-from typing import AsyncGenerator, Dict, Any
-import asyncio
-import json
 
 from .config import settings
-from .types import ChatRequest, RetrieveRequest
-from .graph.planner import plan_request
-from .graph.retriever import retrieve_docs
 from .graph.answerer import synthesize_answer
 from .graph.guardrails import enforce_citations
-from .sse import sse_event
+from .graph.planner import plan_request
+from .graph.retriever import retrieve_docs
 from .llm.provider import choose_model
-import logging
+from .sse import sse_event
+from .types import ChatRequest, RetrieveRequest
 
 logging.basicConfig(
     level=settings.log_level,

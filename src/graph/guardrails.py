@@ -1,12 +1,11 @@
-from typing import Dict, List
-from ..config import settings
-
-
 def enforce_citations(
-    answer: str, retrieved: List[Dict], citation_ids: List[str], min_citations: int
-) -> Dict:
+    answer: str, retrieved: list[dict], citation_ids: list[str], min_citations: int
+) -> dict:
     if not retrieved or len(citation_ids) == 0:
-        fallback = "I don’t know yet. Try refining the topic or timeframe (e.g., add a 'since:P7D' filter)."
+        fallback = (
+            "I don't know yet. "
+            "Try refining the topic or timeframe (e.g., add a 'since:P7D' filter)."
+        )
         return {
             "answer": fallback,
             "answer_stream": [fallback],

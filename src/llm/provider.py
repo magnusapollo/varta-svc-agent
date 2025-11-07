@@ -1,7 +1,8 @@
 from __future__ import annotations
-from typing import List, Dict, Protocol, Tuple, Optional
-import os
+
 import logging
+import os
+from typing import Protocol
 
 logger = logging.getLogger(__name__)
 
@@ -9,8 +10,8 @@ logger = logging.getLogger(__name__)
 # --------- Provider interface ---------
 class Model(Protocol):
     def generate_answer(
-        self, query: str, docs: List[Dict], max_tokens: int = 500, temperature: float = 0.8
-    ) -> Tuple[str, List[str]]:
+        self, query: str, docs: list[dict], max_tokens: int = 500, temperature: float = 0.8
+    ) -> tuple[str, list[str]]:
         """
         Returns:
           answer_text: str
@@ -23,14 +24,14 @@ class Model(Protocol):
 class LocalStub:
     name = "stub-local"
 
-    def generate_answer(self, query: str, docs: List[Dict]) -> Tuple[str, List[str]]:
+    def generate_answer(self, query: str, docs: list[dict]) -> tuple[str, list[str]]:
         if not docs:
-            msg = "I don’t know yet. Add a topic or timeframe to help me retrieve the right items."
+            msg = "I don't know yet. Add a topic or timeframe to help me retrieve the right items."
             return msg, []
 
         lines = []
         # We map [n] to the *given order* of docs
-        citation_ids: List[str] = []
+        citation_ids: list[str] = []
         for i, d in enumerate(docs, start=1):
             tag = f"[{i}]"
             snippet = (d.get("snippet") or d.get("excerpt") or "").strip()
@@ -41,7 +42,7 @@ class LocalStub:
                 lines.append(f"• {title} {tag}")
             citation_ids.append(d["item_id"])
 
-        answer = f"Here’s what I found on “{query}”:\n" + "\n".join(lines)
+        answer = f"Here's what I found on “{query}”:\n" + "\n".join(lines)
         return answer, citation_ids
 
 
@@ -89,14 +90,14 @@ class OpenAIChat:
         return name
 
     def generate_answer(
-        self, query: str, docs: List[Dict], max_tokens: int, temperature: float
-    ) -> Tuple[str, List[str]]:
+        self, query: str, docs: list[dict], max_tokens: int
+    ) -> tuple[str, list[str]]:
         if not docs:
-            return "I don’t know yet. Try adding a topic filter or a timeframe like since:P7D.", []
+            return "I don't know yet. Try adding a topic filter or a timeframe like since:P7D.", []
 
         # Build source list in fixed order; instruct model to cite with [n]
         sources_lines = []
-        citation_ids: List[str] = []
+        citation_ids: list[str] = []
         for i, d in enumerate(docs, start=1):
             sources_lines.append(
                 f"[{i}] {d.get('title', '').strip()} — {d.get('url', '')} "
@@ -110,8 +111,8 @@ class OpenAIChat:
             "You are an assistant for a site-only RAG chat. "
             "Synthesize concise answers **only** from the provided sources. "
             "Every substantive claim must end with an inline citation marker like [1] or [2]. "
-            "Prefer 2–3 citations from different sources when available. "
-            "If the sources are insufficient, say you don’t know."
+            "Prefer 2-3 citations from different sources when available. "
+            "If the sources are insufficient, say you don't know."
         )
 
         user = (
@@ -121,7 +122,7 @@ class OpenAIChat:
             "- Be concise and factual.\n"
             "- Use only the sources above; no external info.\n"
             "- Add [n] markers at the end of sentences that use source n.\n"
-            "- If uncertain, say you don’t know."
+            "- If uncertain, say you don't know."
         )
 
         try:
@@ -146,7 +147,7 @@ class OpenAIChat:
                 tag = f"[{i}]"
                 fallback_lines.append(f"• {snippet or title} {tag}")
             content = (
-                "Here’s what I found (OpenAI call failed; using fallback stitching):\n"
+                "Here's what I found (OpenAI call failed; using fallback stitching):\n"
                 + "\n".join(fallback_lines)
             )
 
@@ -161,7 +162,7 @@ _REGISTRY = {
 }
 
 
-def choose_model(name: Optional[str]) -> Model:
+def choose_model(name: str | None) -> Model:
     logger.info(f"model chosen: {name}")
     if not name:
         return _REGISTRY["stub-local"]

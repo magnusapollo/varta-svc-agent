@@ -1,18 +1,19 @@
+from typing import Literal
+
 from pydantic import BaseModel, Field
-from typing import List, Optional, Literal
 
 
 class ChatFilters(BaseModel):
-    topic: Optional[List[str]] = None
-    since: Optional[str] = None  # ISO date or ISO8601 period
+    topic: list[str] | None = None
+    since: str | None = None  # ISO date or ISO8601 period
 
 
 class ChatRequest(BaseModel):
-    conversationId: Optional[str] = None
+    conversationId: str | None = None
     message: str
     role: Literal["user", "system"]
-    filters: Optional[ChatFilters] = None
-    mode: Optional[str] = Field(
+    filters: ChatFilters | None = None
+    mode: str | None = Field(
         default="summary", pattern="^(summary|timeline|pros-cons|for-builders)$"
     )
 
@@ -20,4 +21,4 @@ class ChatRequest(BaseModel):
 class RetrieveRequest(BaseModel):
     query: str
     k: int = 5
-    filters: Optional[ChatFilters] = None
+    filters: ChatFilters | None = None

@@ -1,6 +1,9 @@
 from __future__ import annotations
+
+from typing import Any
+
 import httpx
-from typing import Dict, Any, List
+
 from ..config import settings
 
 
@@ -9,7 +12,7 @@ class CoreApiClient:
         self.base = base_url or settings.core_api_base
         self._client = httpx.AsyncClient(timeout=10)
 
-    async def search(self, query: str, k: int, filters: dict | None) -> List[Dict[str, Any]]:
+    async def search(self, query: str, k: int, filters: dict | None) -> list[dict[str, Any]]:
         # Contract: GET /search?q=...&k=...&topic=...&since=...
         params = {"q": query, "k": k}
         if filters:
@@ -21,7 +24,7 @@ class CoreApiClient:
         r.raise_for_status()
         return r.json().get("results", [])
 
-    async def item(self, slug: str) -> Dict[str, Any]:
+    async def item(self, slug: str) -> dict[str, Any]:
         r = await self._client.get(f"{self.base}/items/{slug}")
         r.raise_for_status()
         return r.json()
