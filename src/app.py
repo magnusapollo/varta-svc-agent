@@ -60,7 +60,6 @@ async def chat_stream(req: ChatRequest = Body(...)):
         final_payload = enforce_citations(
             answer, results, citation_ids, min_citations=settings.min_citations
         )
-        logger.info(final_payload)
 
         # stream tokens
         for chunk in final_payload["answer_stream"]:

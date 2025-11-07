@@ -126,20 +126,19 @@ class OpenAIChat:
 
         try:
             # Prefer chat.completions endpoint for broad compatibility
-            resp = self._client.chat.completions.create(
+            resp = self._client.responses.create(
                 model=self.model,
-                messages=[
+                input=[
                     {"role": "system", "content": system},
                     {"role": "user", "content": user},
                 ],
-                temperature=1,
-                max_completion_tokens=max_tokens,
+                max_output_tokens=max_tokens,
             )
-            content = (resp.choices[0].message.content or "").strip()
-            logger.debug(content)
+            content = resp.output_text
+            logger.debug("Model Response: %s", content)
         except Exception as e:
             # Fall back gracefully to a stub-like response on error
-            logger.error(e)
+            logger.error("Model failed, falling back to local. Error: %s", e)
             fallback_lines = []
             for i, d in enumerate(docs[:3], start=1):
                 snippet = (d.get("snippet") or d.get("excerpt") or "").strip()
