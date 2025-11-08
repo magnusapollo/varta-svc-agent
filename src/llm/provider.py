@@ -90,7 +90,7 @@ class OpenAIChat:
         return name
 
     def generate_answer(
-        self, query: str, docs: list[dict], max_tokens: int
+        self, query: str, docs: list[dict], max_tokens: int, temperature: float
     ) -> tuple[str, list[str]]:
         if not docs:
             return "I don't know yet. Try adding a topic filter or a timeframe like since:P7D.", []

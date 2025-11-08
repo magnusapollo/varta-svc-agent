@@ -4,7 +4,7 @@ from ..config import settings
 from ..retrieval.hybrid import hybrid_search, resolve_items
 
 
-async def retrieve_docs(plan: dict[str, Any]) -> list[dict[str, Any]]:
+def retrieve_docs(plan: dict[str, Any]) -> dict[str, Any]:
     # In v1, USE_MOCKS governs whether we call Core API (omitted here) or use fixtures.
     # For simplicity, we always use local hybrid over fixtures;
     # switching to Core API is via client_coreapi.
@@ -17,4 +17,4 @@ async def retrieve_docs(plan: dict[str, Any]) -> list[dict[str, Any]]:
     for r in res:
         m = meta_by_id.get(r["item_id"], {})
         enriched.append({**r, **m})
-    return enriched
+    return {"retrieved": enriched}

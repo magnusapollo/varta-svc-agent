@@ -1,9 +1,11 @@
 from ..config import settings
-from ..llm.provider import Model
+from ..llm.provider import choose_model
+
+model = choose_model(settings.model_name)
 
 
 def synthesize_answer(
-    query: str, retrieved: list[dict], model: Model, max_tokens: int, temperature: float
+    query: str, retrieved: list[dict], max_tokens: int = 3000, temperature: float = 0.5
 ) -> tuple[str, list[str]]:
     # Select up to MIN_CITATIONS docs for inline markers, ensure diversity
     top = retrieved[: max(settings.min_citations, len(retrieved))]

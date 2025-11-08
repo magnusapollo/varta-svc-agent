@@ -17,6 +17,8 @@ python-dotenv = ">=1.0"
 numpy = ">=1.26"
 tldextract = ">=5.1"
 openai = ">=1.0.0"
+langgraph = "^1.0.2"
+langchain-openai = "1.0.2"
 
 # NOTE: No scikit-learn / scipy in base deps to avoid Fortran / PEP517 builds.
 
