@@ -24,7 +24,7 @@ class Model(Protocol):
 class LocalStub:
     name = "stub-local"
 
-    def generate_answer(self, query: str, docs: list[dict]) -> tuple[str, list[str]]:
+    def generate_answer(self, query: str, docs: list[dict], max_tokens: int = 500, temperature: float = 0.8) -> tuple[str, list[str]]:
         if not docs:
             msg = "I don't know yet. Add a topic or timeframe to help me retrieve the right items."
             return msg, []
