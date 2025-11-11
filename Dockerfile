@@ -1,4 +1,4 @@
-FROM python:3.12-slim as builder
+FROM python:3.12-slim AS builder
 WORKDIR /app
 
 RUN pip install poetry
@@ -10,7 +10,7 @@ RUN poetry install --no-root --without dev
 COPY src src
 COPY fixtures fixtures
 
-FROM python:3.12-slim as production
+FROM python:3.12-slim AS production
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
